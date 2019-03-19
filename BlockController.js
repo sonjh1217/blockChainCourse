@@ -31,6 +31,8 @@ class BlockController {
 
             this.blockchain.getBlock(index).then((result) => {
                 res.send(result);
+            }).catch((err) => {
+                res.send(err);
             });
         });
     }
@@ -43,14 +45,23 @@ class BlockController {
             // Add your code here
             if (req.query.hasOwnProperty('data')) {
                 let data = req.query['data'];
-                let newBlock = new BlockClass.Block(data);
-                newBlock.height = this.blocks.length;
-                newBlock.hash = SHA256(JSON.stringify(data)).toString();
-                this.blocks.push(newBlock);
-                let stringBlock = JSON.stringify(newBlock)
-                res.send(stringBlock);
+
+                let newBlock = BlockClass.Block.DataInstance(data);
+                this.blockchain.addBlock(newBlock).then((result) => {
+                    console.log('this.blockchain.addBlock');
+                    console.log(result);
+                    let stringBlock = JSON.stringify(newBlock);
+                    console.log(stringBlock);
+                    res.send(stringBlock);
+                }).catch((err) => {
+                    res.send(err.toString());
+                    console.log(err.toString());
+                });
+
+
+            } else {
+                res.send('error: data is empty');
             }
-            res.send('No data');
         });
     }
 

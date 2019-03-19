@@ -3,6 +3,7 @@
 |  =============================================================*/
 
 let level = require('level');
+const BlockClass = require('./Block.js');
 // let chainDB = './chaindata';
 // let db = level(chainDB);
 
@@ -30,11 +31,11 @@ class LevelSandbox {
 // Add data to levelDB with key/value pair
     addLevelDBData(key,value){
         var db = this.db;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             db.put(key, value, function(err) {
-                if (err) reject(err)
-                else resolve(err)
-            })
+                if (err) reject(err);
+                else resolve(err);
+            });
         })
     }
 
@@ -45,7 +46,7 @@ class LevelSandbox {
             db.get(key, function(err, value) {
                 if (err) reject(err);
                 resolve(value);
-            })
+            });
         })
     }
 
@@ -53,6 +54,7 @@ class LevelSandbox {
     addDataToLevelDB(value) {
         let i = 0;
         var db = this.db;
+        let self = this;
 
         return new Promise((resolve, reject) => {
             db.createReadStream().on('data', function(data) {
@@ -60,11 +62,15 @@ class LevelSandbox {
                 console.log('Block #' + i + "'s data: " + data);
                 i++;
             }).on('error', function(err) {
-                reject(err)
+                reject(err);
             }).on('close', function() {
                 console.log('Add Block #' + i);
-                addLevelDBData(i, value);
-                resolve(i)
+                self.addLevelDBData(i, value).then((result) => {
+                    resolve(result);
+                }).catch((err) => {
+                    reject(err);
+                });
+
             });
         })
     }
@@ -81,7 +87,7 @@ class LevelSandbox {
                 count++;
             })
                 .on('error', function (err) {
-                    reject(err)
+                    reject(err);
                 })
                 .on('close', function () {
                     resolve(count);
@@ -96,9 +102,9 @@ class LevelSandbox {
 
         return new Promise((resolve, reject) => {
             db.get(blockHeight, function(err, value) {
-                if (err) return console.log('Not found!', err);
+                if (err) return reject(err);
                 let blockJSON = JSON.parse(value);
-                var block = new Block(blockJSON['height'], blockJSON['time'], blockJSON['data'], blockJSON['previousHash'], blockJSON['hash'])
+                var block = new BlockClass.Block(blockJSON['height'], blockJSON['time'], blockJSON['data'], blockJSON['previousHash'], blockJSON['hash'])
                 resolve(block);
             });
         })

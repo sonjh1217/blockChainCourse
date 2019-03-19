@@ -42,7 +42,7 @@ class Blockchain{
 
     // addBlock method
 	addBlock(newBlock){
-		return new Promise(((resolve, reject) => {
+		return new Promise((resolve, reject) => {
             LevelSandbox.getBlocksCount().then((result) => {
                 newBlock.height = result;
                 newBlock.time = new Date().getTime().toString().slice(0,-3);
@@ -54,12 +54,15 @@ class Blockchain{
                         // SHA256 requires a string of data
                         newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
                         LevelSandbox.addDataToLevelDB(JSON.stringify(newBlock).toString()).then((result => {
-                            resolve(result)
+                            console.log('added Data To LevelDB');
+                            resolve(result);
                         })).catch((err) => {
                             console.log(err);
                             reject(err);
-                        })
-                    })
+                        });
+                    }).catch((err) => {
+                        reject(err);
+                    });
 
                 } else {
                     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
@@ -68,11 +71,13 @@ class Blockchain{
                     })).catch((err) => {
                         console.log(err);
                         reject(err);
-                    })
+                    });
                 }
 
+            }).catch((err) => {
+                reject(err);
             });
-        }))
+        })
 	}
 
 
@@ -82,7 +87,10 @@ class Blockchain{
         return new Promise((resolve, reject) => {
             LevelSandbox.getBlocksCount().then((result) => {
                 resolve(result)
-            });
+            }).catch((err) => {
+                console.log(err);
+                reject(err);
+            })
         })
 	}
 
@@ -161,6 +169,11 @@ class Blockchain{
             });
         });
 	}
+
+    // get block
+    getBlock(blockHeight){
+	    return LevelSandbox.getBlock(blockHeight);
+    }
 }
 
 module.exports.Blockchain = Blockchain;
