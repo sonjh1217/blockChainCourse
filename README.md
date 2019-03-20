@@ -33,6 +33,14 @@ Give an example
 node app.js
 ```
 
+## Endpoints
+
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `{host}:8000/block/{block height}`| Retrieve information of the block of the height                      |
+| `POST`   | `{host}:8000/block`            | Create a new block. Provide the data of the block using body ex. {"data": "The New Block"}                      |
+
+
 ## Authors
 
 * **Jihyun Son** - [Github](https://github.com/sonjh1217)
