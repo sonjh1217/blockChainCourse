@@ -43,8 +43,8 @@ class BlockController {
     postNewBlock() {
         this.app.post("/block", (req, res) => {
             // Add your code here
-            if (req.query.hasOwnProperty('data')) {
-                let data = req.query['data'];
+            if (req.body.hasOwnProperty('data')) {
+                let data = req.body.data;
 
                 let newBlock = BlockClass.Block.DataInstance(data);
                 this.blockchain.addBlock(newBlock).then((result) => {
