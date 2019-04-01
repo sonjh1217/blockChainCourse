@@ -27,7 +27,7 @@ class Mempool {
             this.mempool[walletAddress] = response;
 
             this.timeoutRequests[walletAddress] = setTimeout(function(){
-                self.removeValidationRequest(walletAddress)
+                this.removeValidationRequest(walletAddress)
             }, TimeoutRequestsWindowTime);
         }
         return response;
