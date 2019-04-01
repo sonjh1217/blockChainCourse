@@ -1,6 +1,7 @@
 const SHA256 = require('crypto-js/sha256');
 const BlockClass = require('./Block.js');
 const Blockchain = require('./Blockchain.js');
+const Mempool = require('./Mempool');
 
 
 /**
@@ -16,10 +17,12 @@ class BlockController {
         this.app = app;
 
         this.blockchain = new Blockchain.Blockchain(false);
+        this.mempool = new Mempool.Mempool();
 
         this.initializeMockData();
         this.getBlockByIndex();
         this.postNewBlock();
+        this.requestValidation();
     }
 
     /**
@@ -65,6 +68,14 @@ class BlockController {
         });
     }
 
+    requestValidation() {
+        this.app.post("/requestValidation", (req, res) => {
+            const walletAddress = req.body.address;
+            const object = this.mempool.addRequestValidation(walletAddress);
+            res.status(200).send(object);
+        });
+    }
+
     /**
      * Help method to inizialized Mock dataset, adds 10 test blocks to the blocks array
      */
@@ -86,7 +97,6 @@ class BlockController {
             });
         })
     }
-
 }
 
 /**
