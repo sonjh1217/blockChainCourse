@@ -8,7 +8,7 @@ class Mempool {
 
     addRequestValidation(walletAddress) {
         let response;
-        if (this.timeoutRequests[walletAddress]) {
+        if (this.mempool[walletAddress]) {
             response = this.mempool[walletAddress];
             let timeElapse = (new Date().getTime().toString().slice(0,-3)) - response.requestTimestamp;
             let timeLeft = (TimeoutRequestsWindowTime/1000) - timeElapse;
@@ -26,8 +26,9 @@ class Mempool {
 
             this.mempool[walletAddress] = response;
 
+            let self = this;
             this.timeoutRequests[walletAddress] = setTimeout(function(){
-                this.removeValidationRequest(walletAddress)
+                self.removeValidationRequest(walletAddress);
             }, TimeoutRequestsWindowTime);
         }
         return response;
@@ -35,6 +36,7 @@ class Mempool {
 
     removeValidationRequest(walletAddress) {
         delete (this.mempool[walletAddress]);
+        delete (this.timeoutRequests[walletAddress]);
     }
 }
 
