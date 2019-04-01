@@ -10,16 +10,16 @@ class Mempool {
         let response;
         if (this.mempool[walletAddress]) {
             response = this.mempool[walletAddress];
-            let timeElapse = (new Date().getTime().toString().slice(0,-3)) - response.requestTimestamp;
+            let timeElapse = (new Date().getTime().toString().slice(0,-3)) - response.requestTimeStamp;
             let timeLeft = (TimeoutRequestsWindowTime/1000) - timeElapse;
             response.validationWindow = timeLeft;
         } else {
-            const requestTimestamp = new Date().getTime().toString().slice(0,-3);
-            const message = walletAddress + ':' + requestTimestamp + ':starRegistry';
+            const requestTimeStamp = new Date().getTime().toString().slice(0,-3);
+            const message = walletAddress + ':' + requestTimeStamp + ':starRegistry';
 
             response = {
                 walletAddress: walletAddress,
-                requestTimestamp: requestTimestamp,
+                requestTimeStamp: requestTimeStamp,
                 message: message,
                 validationWindow: TimeoutRequestsWindowTime/1000
             }
