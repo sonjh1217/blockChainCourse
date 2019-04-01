@@ -23,6 +23,7 @@ class BlockController {
         this.getBlockByIndex();
         this.postNewBlock();
         this.requestValidation();
+        this.validateRequestByWallet();
     }
 
     /**
@@ -71,9 +72,18 @@ class BlockController {
     requestValidation() {
         this.app.post("/requestValidation", (req, res) => {
             const walletAddress = req.body.address;
-            const object = this.mempool.addRequestValidation(walletAddress);
-            res.status(200).send(object);
+            const response = this.mempool.addRequestValidation(walletAddress);
+            res.status(200).send(response);
         });
+    }
+
+    validateRequestByWallet() {
+        this.app.post('/message-signature/validate', (req, res) => {
+            const walletAddress = req.body.address;
+            const signature = req.body.signature;
+            const response = this.mempool.validateRequestByWallet(walletAddress, signature);
+            res.status(200).send(response)
+        })
     }
 
     /**
