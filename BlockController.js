@@ -19,7 +19,7 @@ class BlockController {
         this.blockchain = new Blockchain.Blockchain(false);
         this.mempool = new Mempool.Mempool();
 
-        this.getBlockByIndex();
+        this.getBlockByHeight();
         this.postNewBlock();
         this.requestValidation();
         this.validateRequestByWallet();
@@ -30,12 +30,18 @@ class BlockController {
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
      */
-    getBlockByIndex() {
-        this.app.get("/block/:index", (req, res) => {
-            let index = req.param('index');
+    getBlockByHeight() {
+        this.app.get("/block/:height", (req, res) => {
+            let height = req.param('height');
 
-            this.blockchain.getBlock(index).then((result) => {
-                res.send(result);
+            this.blockchain.getBlock(height).then((result) => {
+                if (!result) {
+                    res.status(404).send('No Block is found')
+                } else {
+                    let storyDecoded = hex2ascii(result.body.star.story);
+                    result.body.star.storyDecoded = storyDecoded;
+                    res.status(200).send(result);
+                }
             }).catch((err) => {
                 res.send(err);
             });

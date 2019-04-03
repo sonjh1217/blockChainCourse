@@ -104,7 +104,7 @@ class LevelSandbox {
             db.get(blockHeight, function(err, value) {
                 if (err) return reject(err);
                 let blockJSON = JSON.parse(value);
-                var block = new BlockClass.Block(blockJSON['height'], blockJSON['time'], blockJSON['data'], blockJSON['previousHash'], blockJSON['hash'])
+                var block = new BlockClass.Block(blockJSON['height'], blockJSON['time'], blockJSON['body'], blockJSON['previousHash'], blockJSON['hash'])
                 resolve(block);
             });
         })
