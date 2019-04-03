@@ -3,16 +3,16 @@
 |  ====================================================*/
 
 class Block {
-    constructor(height, time, data, previousHash, hash){
+    constructor(height, time, body, previousHash, hash){
         this.height = height;
         this.time = time;
-        this.data = data;
+        this.body = body;
         this.previousHash = previousHash;
         this.hash = hash;
     }
 
-    static DataInstance(data){
-        return new Block('', '', data, '0x', '')
+    static DataInstance(body){
+        return new Block('', '', body, '0x', '')
     }
 
 }

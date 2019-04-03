@@ -47,22 +47,27 @@ class BlockController {
     postNewBlock() {
         this.app.post("/block", (req, res) => {
             // Add your code here
-            if (req.body.hasOwnProperty('data')) {
-                let data = req.body.data;
+            if (req.body) {
+                let body = req.body;
+                let starStory = body.star.story;
+                body.star.story = Buffer.from(starStory).toString('hex');
+                if (!this.mempool.verifyAddressRequest(body.address)) {
+                    res.status(400).send()
+                } else {
+                    let newBlock = BlockClass.Block.DataInstance(body);
+                    this.blockchain.addBlock(newBlock).then((result) => {
+                        delete(this.mempool.mempoolValid[body.address]);
 
-                let newBlock = BlockClass.Block.DataInstance(data);
-                this.blockchain.addBlock(newBlock).then((result) => {
-                    console.log('this.blockchain.addBlock');
-                    console.log(result);
-                    let stringBlock = JSON.stringify(newBlock);
-                    console.log(stringBlock);
-                    res.send(stringBlock);
-                }).catch((err) => {
-                    res.send(err.toString());
-                    console.log(err.toString());
-                });
-
-
+                        console.log('this.blockchain.addBlock');
+                        console.log(result);
+                        let stringBlock = JSON.stringify(newBlock);
+                        console.log(stringBlock);
+                        res.send(stringBlock);
+                    }).catch((err) => {
+                        res.send(err.toString());
+                        console.log(err.toString());
+                    });
+                }
             } else {
                 res.send('error: data is empty');
             }
@@ -85,6 +90,14 @@ class BlockController {
             res.status(200).send(response)
         })
     }
+
+    addBlock() {
+        this.app.post('/block', (req, res) => {
+
+        })
+    }
+
+
 
     /**
      * Help method to inizialized Mock dataset, adds 10 test blocks to the blocks array

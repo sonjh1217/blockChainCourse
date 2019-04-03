@@ -62,6 +62,17 @@ class Mempool {
             return 'Validation window is expired.';
         }
     }
+
+    verifyAddressRequest(walletAddress) {
+        let validatedRequest = this.mempoolValid[walletAddress];
+        if (!validatedRequest) {
+            return false;
+        } else if (!validatedRequest.status.messageSignature) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 module.exports.Mempool = Mempool;
