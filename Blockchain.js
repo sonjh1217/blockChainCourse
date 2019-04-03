@@ -6,6 +6,7 @@ const SHA256 = require('crypto-js/sha256');
 
 const DBPath = './chaindata';
 const LevelSandbox = require('./LevelSandbox.js')(DBPath);
+const BlockClass = require('./Block.js');
 
 
 /* ===== Blockchain ===================================
@@ -37,7 +38,11 @@ class Blockchain{
     }
 
 	createGenesisBlock(){
-		return Block.DataInstance("First block in the chain - Genesis block");
+	    let genesisBody = {
+	        address: "genesis"
+        }
+
+	    return BlockClass.Block.DataInstance(genesisBody);
 	}
 
     // addBlock method
@@ -177,6 +182,10 @@ class Blockchain{
 
     getBlockByHash(hash) {
 	    return LevelSandbox.getBlockByHash(hash);
+    }
+
+    getBlockByWalletAddress(address) {
+        return LevelSandbox.getBlockByWalletAddress(address);
     }
 }
 

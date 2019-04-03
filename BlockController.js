@@ -19,12 +19,12 @@ class BlockController {
         this.blockchain = new Blockchain.Blockchain(false);
         this.mempool = new Mempool.Mempool();
 
-        this.initializeMockData();
         this.getBlockByIndex();
         this.postNewBlock();
         this.requestValidation();
         this.validateRequestByWallet();
         this.getBlockByHash();
+        this.getBlockByWalletAddress();
     }
 
     /**
@@ -109,28 +109,20 @@ class BlockController {
         });
     }
 
-
-
-    /**
-     * Help method to inizialized Mock dataset, adds 10 test blocks to the blocks array
-     */
-    initializeMockData() {
-        return new Promise((resolve, reject) => {
-            this.blockchain.getBlockHeight().then((result) => {
-                if(result === 0){
-                    (function theLoop (i) {
-                        setTimeout(function () {
-                            let blockTest = Block.DataInstance("Test Block - " + (i + 1));
-                            this.blockchain.addBlock(blockTest).then((result) => {
-                                console.log(result);
-                                i++;
-                                if (i < 3) theLoop(i);
-                            });
-                        }, 10000);
-                    })(0);
-                }
+    getBlockByWalletAddress() {
+        this.app.get('/stars/address/:address', (req, res) => {
+            let address = req.params.address;
+            this.blockchain.getBlockByWalletAddress(address).then((blocks) => {
+                blocks = blocks.map(block => {
+                    let storyDecoded = hex2ascii(block.body.star.story);
+                    block.body.star.storyDecoded = storyDecoded;
+                    return block;
+                })
+                res.status(200).send(blocks);
+            }).catch(err => {
+                res.send(err.toString());
             });
-        })
+        });
     }
 }
 
