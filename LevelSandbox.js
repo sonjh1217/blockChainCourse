@@ -109,6 +109,25 @@ class LevelSandbox {
             });
         })
     }
+
+    // Get block by hash
+    getBlockByHash(hash) {
+        let self = this;
+        let block = null;
+        var db = this.db;
+        return new Promise(function(resolve, reject) {
+            db.createReadStream().on('data', function (data) {
+                let currentBlock = JSON.parse(data.value);
+                if (currentBlock.hash === hash) {
+                    block = currentBlock;
+                }
+            }).on('error', function (err) {
+                reject(err)
+            }).on('close', function () {
+                resolve(block);
+            });
+        });
+    }
 }
 
 /* ===== Testing ==============================================================|

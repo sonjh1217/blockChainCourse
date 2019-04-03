@@ -174,6 +174,10 @@ class Blockchain{
     getBlock(blockHeight){
 	    return LevelSandbox.getBlock(blockHeight);
     }
+
+    getBlockByHash(hash) {
+	    return LevelSandbox.getBlockByHash(hash);
+    }
 }
 
 module.exports.Blockchain = Blockchain;

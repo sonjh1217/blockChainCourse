@@ -2,7 +2,7 @@ const SHA256 = require('crypto-js/sha256');
 const BlockClass = require('./Block.js');
 const Blockchain = require('./Blockchain.js');
 const Mempool = require('./Mempool');
-
+const hex2ascii = require('hex2ascii');
 
 /**
  * Controller Definition to encapsulate routes to work with blocks
@@ -24,6 +24,7 @@ class BlockController {
         this.postNewBlock();
         this.requestValidation();
         this.validateRequestByWallet();
+        this.getBlockByHash();
     }
 
     /**
@@ -88,7 +89,24 @@ class BlockController {
             const signature = req.body.signature;
             const response = this.mempool.validateRequestByWallet(walletAddress, signature);
             res.status(200).send(response)
-        })
+        });
+    }
+
+    getBlockByHash() {
+        this.app.get('/stars/hash/:starHash', (req, res) => {
+            let hash = req.params.starHash;
+            this.blockchain.getBlockByHash(hash).then((result) => {
+                if (!result) {
+                    res.status(404).send('No Block is found')
+                } else {
+                    let storyDecoded = hex2ascii(result.body.star.story);
+                    result.body.star.storyDecoded = storyDecoded;
+                    res.status(200).send(result);
+                }
+            }).catch(err => {
+                res.send(err.toString());
+            });
+        });
     }
 
 
