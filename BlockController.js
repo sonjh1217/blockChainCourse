@@ -91,12 +91,6 @@ class BlockController {
         })
     }
 
-    addBlock() {
-        this.app.post('/block', (req, res) => {
-
-        })
-    }
-
 
 
     /**
