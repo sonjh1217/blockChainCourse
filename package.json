@@ -16,5 +16,13 @@
     "express": "^4.16.4",
     "hex2ascii": "0.0.3",
     "level": "^4.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonjh1217/blockChainCourse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sonjh1217/blockChainCourse/issues"
+  },
+  "homepage": "https://github.com/sonjh1217/blockChainCourse#readme"
 }
