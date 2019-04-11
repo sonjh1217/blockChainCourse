@@ -67,7 +67,7 @@ class BlockController {
 
                         console.log('this.blockchain.addBlock');
                         console.log(result);
-                        let stringBlock = JSON.stringify(newBlock);
+                        let stringBlock = JSON.parse(newBlock);
                         console.log(stringBlock);
                         res.send(stringBlock);
                     }).catch((err) => {
