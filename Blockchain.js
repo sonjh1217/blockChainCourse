@@ -21,10 +21,18 @@ const BlockClass = require('./Block.js');
 |  ====================================================*/
 
 class Blockchain{
-	constructor(isFromScratch){
+    constructor(isFromScratch){
 	    if (isFromScratch == true) {
             // new chain array
             this.startFromScratch();
+        } else {
+            return this.getBlockHeight().then(height => {
+                if (height == 0) {
+                    this.addBlock(this.createGenesisBlock()).then( () => {
+                        }
+                    );
+                }
+            }).catch(err => console.log(err));
         }
 	}
 
