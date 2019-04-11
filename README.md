@@ -11,7 +11,7 @@ Installing Node and NPM is pretty straightforward using the installer package av
 Install libraries.
 
 ```
-npm init
+npm install
 ```
 
 
