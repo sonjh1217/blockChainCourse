@@ -1,6 +1,6 @@
 class ValidatedRequest {
     constructor(walletAddress, requestTimeStamp, message, validationWindow, isValid) {
-        this.registerStar = true;
+        this.registerStar = isValid;
         this.status = {
             address: walletAddress,
             requestTimeStamp: requestTimeStamp,
