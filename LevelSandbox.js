@@ -34,7 +34,7 @@ class LevelSandbox {
         return new Promise((resolve, reject) => {
             db.put(key, value, function(err) {
                 if (err) reject(err);
-                else resolve(err);
+                else resolve(value);
             });
         })
     }

@@ -62,14 +62,13 @@ class BlockController {
                     res.status(400).send()
                 } else {
                     let newBlock = BlockClass.Block.DataInstance(body);
-                    this.blockchain.addBlock(newBlock).then((result) => {
+                    this.blockchain.addBlock(newBlock).then((createdBlock) => {
                         delete(this.mempool.mempoolValid[body.address]);
 
                         console.log('this.blockchain.addBlock');
-                        console.log(result);
-                        let stringBlock = JSON.parse(newBlock);
-                        console.log(stringBlock);
-                        res.send(stringBlock);
+                        console.log(createdBlock);
+                        let jsonBlock = JSON.parse(createdBlock);
+                        res.send(jsonBlock);
                     }).catch((err) => {
                         res.send(err.toString());
                         console.log(err.toString());
