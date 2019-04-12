@@ -26,7 +26,7 @@ class Blockchain{
             // new chain array
             this.startFromScratch();
         } else {
-            return this.getBlockHeight().then(height => {
+            this.getBlockHeight().then(height => {
                 if (height == 0) {
                     this.addBlock(this.createGenesisBlock()).then( () => {
                         }
